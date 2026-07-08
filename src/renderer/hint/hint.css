@@ -1,0 +1,87 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+#card {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: calc(100% - 12px);
+  margin: 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #2b3a49;
+  background: rgba(16, 23, 30, 0.96);
+  color: #dfe7ee;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  animation: slide-in 300ms ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#eye {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+#content {
+  flex: 1;
+  min-width: 0;
+}
+
+#title {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #9fc1de;
+}
+
+#countdown {
+  font-variant-numeric: tabular-nums;
+}
+
+#message {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #c4d2dd;
+}
+
+#dismiss {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: #243240;
+  color: #8fa5b8;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#dismiss:hover {
+  background: #31445a;
+  color: #dfe7ee;
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Eye 20-20-20 — Settings</title>
+    <link rel="stylesheet" href="./settings.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Eye 20-20-20</h1>
+      <p>Every 20 minutes, look at something 20 feet away for 20 seconds.</p>
+    </header>
+
+    <form id="form">
+      <section>
+        <h2>Timer</h2>
+        <label>
+          <span>Work period (minutes)</span>
+          <input type="number" id="workMinutes" min="1" max="240" step="1" required />
+        </label>
+        <label>
+          <span>Break length (seconds)</span>
+          <input type="number" id="breakSeconds" min="5" max="600" step="5" required />
+        </label>
+        <label class="check">
+          <input type="checkbox" id="skippable" />
+          <span>Allow skipping breaks with Esc</span>
+        </label>
+      </section>
+
+      <section>
+        <h2>Overlay</h2>
+        <label>
+          <span>Overlay opacity: <b id="opacityValue">92%</b></span>
+          <input type="range" id="overlayOpacity" min="30" max="100" step="1" />
+        </label>
+        <label class="check">
+          <input type="checkbox" id="soundEnabled" />
+          <span>Play a soft chime when the break starts</span>
+        </label>
+        <label>
+          <span>Messages (one per line, shown at random)</span>
+          <textarea id="messages" rows="8" spellcheck="false"></textarea>
+        </label>
+      </section>
+
+      <section>
+        <h2>Pre-break hint</h2>
+        <label class="check">
+          <input type="checkbox" id="hintEnabled" />
+          <span>Show a small hint before the break</span>
+        </label>
+        <label>
+          <span>Hint lead time (seconds before the break)</span>
+          <input type="number" id="hintLeadSeconds" min="5" max="300" step="5" required />
+        </label>
+      </section>
+
+      <section>
+        <h2>Activity</h2>
+        <label>
+          <span>Pause timer after inactivity (minutes)</span>
+          <input type="number" id="idlePauseMinutes" min="1" max="120" step="1" required />
+        </label>
+        <label class="check">
+          <input type="checkbox" id="openAtLogin" />
+          <span>Start Eye 20-20-20 when I log in</span>
+        </label>
+      </section>
+
+      <footer>
+        <p id="status"></p>
+        <div class="buttons">
+          <button type="button" id="reset">Restore defaults</button>
+          <button type="submit" id="save" class="primary">Save</button>
+        </div>
+        <p class="note">Saving restarts the current work period.</p>
+      </footer>
+    </form>
+
+    <script type="module" src="./settings.ts"></script>
+  </body>
+</html>
