@@ -97,6 +97,12 @@ textarea {
   line-height: 1.5;
 }
 
+/* Each line picks its own direction, so English and Arabic messages can mix. */
+#messages {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
 input[type='range'] {
   width: 100%;
   accent-color: #4a90d9;
