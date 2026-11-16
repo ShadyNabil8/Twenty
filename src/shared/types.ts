@@ -10,6 +10,11 @@ export interface Settings {
   messages: string[]
   /** Whether the break can be skipped with Esc. */
   skippable: boolean
+  /**
+   * Strict breaks: no in-app way to end a break early — not even the Esc-hold
+   * hatch. Only ending the process does (the mouse jail auto-releases on exit).
+   */
+  strictBreaks: boolean
   /** Show a toast shortly before the break. */
   hintEnabled: boolean
   /** How long before the break the hint appears, in seconds. */

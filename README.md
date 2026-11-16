@@ -23,7 +23,9 @@ npm run dist         # build the installer for your OS into release/
 
 During a break, tap **Esc** to skip (when skipping is enabled) — or **hold Esc
 for 3 seconds** to force-end a break in an emergency, even when skipping is
-disabled. Settings, snooze ("Snooze for 1 Hour") and "Pause Until Tomorrow"
+disabled. With **Strict breaks** enabled in Settings, neither works: the break
+always runs its full length, and the only way out is ending the process (e.g.
+Task Manager via Ctrl+Alt+Del), which releases the mouse. Settings, snooze ("Snooze for 1 Hour") and "Pause Until Tomorrow"
 live in the tray menu.
 
 ### Platform notes
@@ -67,6 +69,7 @@ The application must implement the following features:
 ### 5. Skippable Breaks
 
 * Users must be able to configure whether the dark background overlay can be skipped or not.
+* Optional **strict breaks**: the break cannot be ended early from the overlay at all (no Esc tap, no Esc hold).
 
 ### 6. Pre-Break Hint Notification
 

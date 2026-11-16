@@ -5,7 +5,8 @@ const params = new URLSearchParams(location.search)
 const message = params.get('message') ?? 'Look at something 20 feet away.'
 const opacity = Number(params.get('opacity') ?? '0.92')
 const endsAt = Number(params.get('endsAt') ?? '0')
-const skippable = params.get('skippable') === '1'
+const strict = params.get('strict') === '1'
+const skippable = !strict && params.get('skippable') === '1'
 const sound = params.get('sound') === '1'
 const primary = params.get('primary') === '1'
 const fadeInMs = Number(params.get('fadeIn') ?? '2500')
@@ -18,9 +19,11 @@ const holdProgress = document.getElementById('hold-progress') as HTMLDivElement
 const holdBar = document.getElementById('hold-bar') as HTMLDivElement
 ;(document.getElementById('message') as HTMLHeadingElement).textContent = message
 
-escapeHintEl.textContent = skippable
-  ? 'Press Esc to skip this break'
-  : 'Hold Esc for 3 seconds to end the break in an emergency'
+escapeHintEl.textContent = strict
+  ? "This break can't be skipped"
+  : skippable
+    ? 'Press Esc to skip this break'
+    : 'Hold Esc for 3 seconds to end the break in an emergency'
 
 // --- Fade in (CSS transition; portable across platforms) ------------------
 let fadedIn = false
@@ -62,7 +65,8 @@ function renderCountdown(): void {
 renderCountdown()
 window.setInterval(renderCountdown, 250)
 
-// --- Esc handling: tap to skip (if allowed), hold to force-end (always) ----
+// --- Esc handling: tap to skip (if allowed), hold to force-end -------------
+// Strict breaks register no Esc handling at all (main also ignores the IPC).
 let holdStart = 0
 let holdTimer: number | null = null
 
@@ -73,25 +77,27 @@ function cancelHold(): void {
   holdBar.style.width = '0'
 }
 
-window.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return
-  if (skippable) {
-    window.eye.escapeBreak(false)
-    return
-  }
-  if (e.repeat || holdTimer !== null) return
-  holdStart = Date.now()
-  holdProgress.classList.add('active')
-  holdTimer = window.setInterval(() => {
-    const progress = (Date.now() - holdStart) / ESC_HOLD_MS
-    holdBar.style.width = `${Math.min(100, progress * 100)}%`
-    if (progress >= 1) {
-      cancelHold()
-      window.eye.escapeBreak(true)
+if (!strict) {
+  window.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return
+    if (skippable) {
+      window.eye.escapeBreak(false)
+      return
     }
-  }, 50)
-})
+    if (e.repeat || holdTimer !== null) return
+    holdStart = Date.now()
+    holdProgress.classList.add('active')
+    holdTimer = window.setInterval(() => {
+      const progress = (Date.now() - holdStart) / ESC_HOLD_MS
+      holdBar.style.width = `${Math.min(100, progress * 100)}%`
+      if (progress >= 1) {
+        cancelHold()
+        window.eye.escapeBreak(true)
+      }
+    }, 50)
+  })
 
-window.addEventListener('keyup', (e) => {
-  if (e.key === 'Escape') cancelHold()
-})
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'Escape') cancelHold()
+  })
+}

@@ -6,6 +6,7 @@ const form = $<HTMLFormElement>('form')
 const workMinutes = $<HTMLInputElement>('workMinutes')
 const breakSeconds = $<HTMLInputElement>('breakSeconds')
 const skippable = $<HTMLInputElement>('skippable')
+const strictBreaks = $<HTMLInputElement>('strictBreaks')
 const overlayOpacity = $<HTMLInputElement>('overlayOpacity')
 const opacityValue = $<HTMLElement>('opacityValue')
 const soundEnabled = $<HTMLInputElement>('soundEnabled')
@@ -20,6 +21,8 @@ function populate(s: Settings): void {
   workMinutes.value = String(s.workMinutes)
   breakSeconds.value = String(s.breakSeconds)
   skippable.checked = s.skippable
+  strictBreaks.checked = s.strictBreaks
+  syncStrict()
   overlayOpacity.value = String(Math.round(s.overlayOpacity * 100))
   soundEnabled.checked = s.soundEnabled
   messages.value = s.messages.join('\n')
@@ -31,6 +34,12 @@ function populate(s: Settings): void {
   updateOpacityLabel()
 }
 
+/** Strict breaks imply no Esc skip: grey out the skippable toggle. */
+function syncStrict(): void {
+  skippable.disabled = strictBreaks.checked
+  if (strictBreaks.checked) skippable.checked = false
+}
+
 function updateOpacityLabel(): void {
   opacityValue.textContent = `${overlayOpacity.value}%`
 }
@@ -40,6 +49,7 @@ function collect(): Partial<Settings> {
     workMinutes: Number(workMinutes.value),
     breakSeconds: Number(breakSeconds.value),
     skippable: skippable.checked,
+    strictBreaks: strictBreaks.checked,
     overlayOpacity: Number(overlayOpacity.value) / 100,
     soundEnabled: soundEnabled.checked,
     messages: messages.value
@@ -63,6 +73,7 @@ function flash(text: string): void {
 }
 
 overlayOpacity.addEventListener('input', updateOpacityLabel)
+strictBreaks.addEventListener('change', syncStrict)
 hintEnabled.addEventListener('change', () => {
   hintLeadSeconds.disabled = !hintEnabled.checked
 })

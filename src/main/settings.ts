@@ -43,6 +43,7 @@ export function validateSettings(raw: unknown): Settings {
     ),
     messages: messageList(r.messages),
     skippable: bool(r.skippable, d.skippable),
+    strictBreaks: bool(r.strictBreaks, d.strictBreaks),
     hintEnabled: bool(r.hintEnabled, d.hintEnabled),
     hintLeadSeconds: clamp(
       r.hintLeadSeconds,

@@ -40,7 +40,10 @@ Run `npm run dev:fast` from a plain terminal (not an IDE terminal) and check:
    fade-in; chime audible once.
 2. Mouse is frozen during the break and restored instantly at break end.
 3. Esc taps skip (when skippable); with skipping disabled in Settings, holding
-   Esc 3 s force-ends the break (progress bar appears).
+   Esc 3 s force-ends the break (progress bar appears). With **Strict breaks**
+   on, overlay reads "This break can't be skipped", Esc tap/hold do nothing,
+   the break completes on its own, and killing the process mid-break frees the
+   mouse.
 4. Hint toast appears bottom-right ~3 s before the break (30 s in real mode),
    mouse stays free, ✕ dismisses it.
 5. Tray tooltip/menu counts down; Snooze 1 Hour and Pause Until Tomorrow work

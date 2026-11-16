@@ -7,6 +7,8 @@ export interface TimerConfig {
   hintLeadMs: number
   idlePauseMs: number
   skippable: boolean
+  /** Strict breaks: ignore both Esc tap (skip) and Esc hold (escapeHold). */
+  strict: boolean
 }
 
 export type BreakEndReason = 'completed' | 'skipped' | 'forced' | 'preempted'
@@ -151,13 +153,25 @@ export class TimerEngine {
     return events
   }
 
-  /** User skip (Esc). Honors the skippable setting. */
+  /** User skip (Esc tap). Honors the skippable and strict settings. */
   skip(now: number): TimerEvent[] {
-    if (this.phase.kind !== 'break' || !this.cfg.skippable) return []
+    if (this.phase.kind !== 'break' || !this.cfg.skippable || this.cfg.strict) return []
     return this.endBreak(now, 'skipped')
   }
 
-  /** Anti-lockout safety hatch: always ends a break, even when not skippable. */
+  /**
+   * Esc-hold anti-lockout hatch: ends a break even when not skippable, unless
+   * the user opted into strict breaks.
+   */
+  escapeHold(now: number): TimerEvent[] {
+    if (this.cfg.strict) return []
+    return this.forceEndBreak(now)
+  }
+
+  /**
+   * Unconditional abort (e.g. overlay renderer crash). Never gated by strict
+   * mode — a break must not outlive a broken overlay.
+   */
   forceEndBreak(now: number): TimerEvent[] {
     if (this.phase.kind !== 'break') return []
     return this.endBreak(now, 'forced')

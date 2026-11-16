@@ -40,6 +40,12 @@ describe('validateSettings', () => {
     expect(s.skippable).toBe(false)
     expect(s.soundEnabled).toBe(false)
   })
+
+  it('validates strictBreaks (default off, non-boolean falls back)', () => {
+    expect(validateSettings({}).strictBreaks).toBe(false)
+    expect(validateSettings({ strictBreaks: true }).strictBreaks).toBe(true)
+    expect(validateSettings({ strictBreaks: 'yes' }).strictBreaks).toBe(false)
+  })
 })
 
 describe('SettingsStore', () => {
@@ -51,11 +57,12 @@ describe('SettingsStore', () => {
   it('persists patches and reloads them', () => {
     dir = mkdtempSync(join(tmpdir(), 'eye-settings-'))
     const store = new SettingsStore(dir)
-    store.set({ workMinutes: 30, skippable: false })
+    store.set({ workMinutes: 30, skippable: false, strictBreaks: true })
 
     const reloaded = new SettingsStore(dir)
     expect(reloaded.get().workMinutes).toBe(30)
     expect(reloaded.get().skippable).toBe(false)
+    expect(reloaded.get().strictBreaks).toBe(true)
     // File on disk is valid JSON.
     expect(JSON.parse(readFileSync(join(dir, 'settings.json'), 'utf8')).workMinutes).toBe(30)
   })

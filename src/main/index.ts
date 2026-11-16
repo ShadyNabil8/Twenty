@@ -31,6 +31,7 @@ function toTimerConfig(s: Settings): TimerConfig {
       hintLeadMs: 3_000,
       idlePauseMs: 60_000,
       skippable: s.skippable,
+      strict: s.strictBreaks,
     }
   }
   return {
@@ -40,6 +41,7 @@ function toTimerConfig(s: Settings): TimerConfig {
     hintLeadMs: s.hintLeadSeconds * 1_000,
     idlePauseMs: s.idlePauseMinutes * 60_000,
     skippable: s.skippable,
+    strict: s.strictBreaks,
   }
 }
 
@@ -88,6 +90,7 @@ if (!app.requestSingleInstanceLock()) {
             opacity: SMOKE ? Math.min(s.overlayOpacity, 0.3) : s.overlayOpacity,
             endsAt: ev.endsAt,
             skippable: s.skippable,
+            strict: s.strictBreaks,
             sound: s.soundEnabled && !SMOKE,
           })
           console.log(`[e2e] break-start displays=${screen.getAllDisplays().length}`)
@@ -176,7 +179,12 @@ if (!app.requestSingleInstanceLock()) {
       }
     })
     ipcMain.on(IPC.overlayEscape, (_event, forced: unknown) => {
-      dispatch(forced === true ? engine.forceEndBreak(Date.now()) : engine.skip(Date.now()))
+      const now = Date.now()
+      const events = forced === true ? engine.escapeHold(now) : engine.skip(now)
+      if (events.length === 0 && engine.phaseKind === 'break' && store.get().strictBreaks) {
+        console.log('[e2e] escape-ignored strict=1')
+      }
+      dispatch(events)
     })
     ipcMain.on(IPC.hintDismiss, () => hint.close())
     ipcMain.handle(IPC.settingsGet, () => store.get())
