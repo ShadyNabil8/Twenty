@@ -18,6 +18,7 @@ export const DEFAULT_SETTINGS: Settings = {
   overlayOpacity: 0.92,
   messages: [...DEFAULT_MESSAGES],
   skippable: true,
+  strictBreaks: false,
   hintEnabled: true,
   hintLeadSeconds: 30,
   soundEnabled: true,
@@ -36,6 +37,9 @@ export const LIMITS = {
 /** Overlay fade-in duration (README: smooth 2–3 second fade). */
 export const FADE_IN_MS = 2500
 export const FADE_OUT_MS = 800
-/** Holding Esc this long always ends a break — anti-lockout safety hatch. */
+/**
+ * Holding Esc this long ends a break — anti-lockout safety hatch. Disabled only
+ * when the user opts into strict breaks.
+ */
 export const ESC_HOLD_MS = 3000
 export const SNOOZE_MS = 60 * 60 * 1000

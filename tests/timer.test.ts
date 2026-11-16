@@ -9,6 +9,7 @@ const cfg: TimerConfig = {
   hintLeadMs: 30_000,
   idlePauseMs: 5 * MIN,
   skippable: true,
+  strict: false,
 }
 
 const T0 = 1_000_000_000_000
@@ -90,10 +91,48 @@ describe('skip and force-end', () => {
     expect(e.phaseKind).toBe('working')
   })
 
-  it('skip/forceEnd are no-ops outside a break', () => {
+  it('escapeHold ends the break when not strict (safety hatch)', () => {
+    const e = inBreak({ skippable: false })
+    const events = e.escapeHold(T0 + 2000)
+    expect(events[0]).toMatchObject({ type: 'break-end', reason: 'forced' })
+    expect(e.phaseKind).toBe('working')
+  })
+
+  it('skip/forceEnd/escapeHold are no-ops outside a break', () => {
     const e = new TimerEngine(cfg, T0)
     expect(e.skip(T0 + 1000)).toEqual([])
     expect(e.forceEndBreak(T0 + 1000)).toEqual([])
+    expect(e.escapeHold(T0 + 1000)).toEqual([])
+  })
+})
+
+describe('strict breaks', () => {
+  function strictBreak(): TimerEngine {
+    // skippable stays true to prove strict overrides it.
+    const e = new TimerEngine({ ...cfg, strict: true }, T0)
+    e.startBreakNow(T0 + 1000)
+    return e
+  }
+
+  it('ignores Esc tap and Esc hold', () => {
+    const e = strictBreak()
+    expect(e.skip(T0 + 2000)).toEqual([])
+    expect(e.escapeHold(T0 + 2000)).toEqual([])
+    expect(e.phaseKind).toBe('break')
+  })
+
+  it('still lets the host abort on overlay crash', () => {
+    const e = strictBreak()
+    const events = e.forceEndBreak(T0 + 2000)
+    expect(events[0]).toMatchObject({ type: 'break-end', reason: 'forced' })
+    expect(e.phaseKind).toBe('working')
+  })
+
+  it('completes on its own after the full break length', () => {
+    const e = strictBreak()
+    const endsAt = T0 + 1000 + cfg.breakMs
+    expect(run(e, T0 + 2000, endsAt - 1000)).toEqual([])
+    expect(e.tick(endsAt)[0]).toMatchObject({ type: 'break-end', reason: 'completed' })
   })
 })
 

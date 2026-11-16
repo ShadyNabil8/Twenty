@@ -62,9 +62,12 @@ All state and timing live in the **main process**; renderers are dumb views.
 
 ## Safety invariants (do not violate)
 
-1. **The Esc-hold safety hatch** (3s, `ESC_HOLD_MS`) must always force-end a break,
-   even with `skippable=false`. An app that locks the mouse on all screens needs
-   an anti-lockout escape.
+1. **The Esc-hold safety hatch** (3s, `ESC_HOLD_MS`) must force-end a break, even
+   with `skippable=false` — **unless the user opted into `strictBreaks`**. In
+   strict mode there is deliberately no in-app escape; the only way out is
+   killing the process, so invariant 2 (auto-release on process death) is the
+   anti-lockout guarantee and must never regress. `strictBreaks` must stay
+   default-off, and the crash path (`forceEndBreak`) is never gated by it.
 2. **Confinement must never outlive the process or the break**: every backend must
    auto-release if the process dies (ClipCursor / X grab / CG association all do),
    and `release()` is called on break end, overlay crash, quit, and tray-quit.

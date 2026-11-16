@@ -27,7 +27,8 @@ features on demand instead of waiting for timers.
   `scripts/smoke.mjs` already strips it.
 - **A real (non-smoke) break freezes the mouse** on the whole machine until the
   break ends. Recovery if needed: tap Esc (skippable breaks) or hold Esc 3 s
-  (always works). Never launch a real-jail run unattended — use
+  (works unless **Strict breaks** is on — then only killing the process
+  releases it). Never launch a real-jail run unattended — use
   `EYE2020_SMOKE=1` for agent-driven runs.
 - Agent-driven manual launches: build first (`npm run build`), then
   `node scripts/smoke.mjs` is the sanctioned launcher; it isolates the settings
