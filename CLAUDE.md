@@ -6,17 +6,18 @@ during breaks, OS-level idle detection, fade-in + chime, snooze/pause from the t
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Dev app with HMR (regenerates icons first) |
-| `npm run dev:fast` | Dev app with seconds-scale timers (`TWENTY_FAST=1`: work 8s, hint 3s, break 4s) |
-| `npm test` | Vitest unit tests (timer engine, settings, messages) |
-| `npm run typecheck` | `tsc --noEmit` (build does NOT typecheck — always run this) |
-| `npm run lint` / `npm run format` | ESLint / Prettier |
-| `npm run build` | electron-vite production build into `out/` |
-| `npm run smoke` | Build + launch the real app and assert a full break cycle via `[e2e]` logs |
-| `node scripts/probe-jail-win32.mjs` | Non-intrusive ClipCursor FFI round-trip check (Windows) |
-| `npm run dist` / `npm run dist:dir` | electron-builder installers / unpacked dir into `release/` |
+| Command                             | What it does                                                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `npm run dev`                       | Dev app with HMR (regenerates icons first)                                                                   |
+| `npm run dev:fast`                  | Dev app with seconds-scale timers (`TWENTY_FAST=1`: work 8s, hint 3s, break 4s)                              |
+| `npm test`                          | Vitest unit tests (timer engine, settings, messages)                                                         |
+| `npm run typecheck`                 | `tsc --noEmit` (build does NOT typecheck — always run this)                                                  |
+| `npm run lint` / `npm run format`   | ESLint / Prettier                                                                                            |
+| `npm run build`                     | electron-vite production build into `out/`                                                                   |
+| `npm run smoke`                     | Build + launch the real app and assert a full break cycle via `[e2e]` logs                                   |
+| `npm run screenshots`               | Build + regenerate README images in `docs/screenshots/` (tray menus flash on screen; Windows-only for those) |
+| `node scripts/probe-jail-win32.mjs` | Non-intrusive ClipCursor FFI round-trip check (Windows)                                                      |
+| `npm run dist` / `npm run dist:dir` | electron-builder installers / unpacked dir into `release/`                                                   |
 
 **IDE terminals:** unset `ELECTRON_RUN_AS_NODE` before launching the app manually,
 or Electron runs as plain Node and crashes on `app.commandLine`. `scripts/smoke.mjs`
