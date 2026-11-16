@@ -63,7 +63,7 @@ export class TrayController {
   refresh(): void {
     const snap = this.getSnapshot()
     const status = statusText(snap)
-    this.tray.setToolTip(`Eye 20-20-20 — ${status}`)
+    this.tray.setToolTip(`twenty — ${status}`)
 
     const items: MenuItemConstructorOptions[] = [
       { label: status, enabled: false },
@@ -83,7 +83,7 @@ export class TrayController {
       { type: 'separator' },
       { label: 'Settings…', click: () => this.actions.openSettings() },
       { type: 'separator' },
-      { label: 'Quit Eye 20-20-20', click: () => this.actions.quit() },
+      { label: 'Quit twenty', click: () => this.actions.quit() },
     )
     this.tray.setContextMenu(Menu.buildFromTemplate(items))
   }

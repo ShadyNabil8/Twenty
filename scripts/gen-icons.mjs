@@ -1,7 +1,7 @@
 // Generates all app icons programmatically (no binary assets in the repo):
 //   resources/tray-16|24|32.png        white line-art eye (Windows/Linux tray)
 //   resources/trayTemplate[@2x].png    black line-art eye (macOS template tray icon)
-//   resources/icon-256.png             filled eye app icon (window icons)
+//   resources/icon-256.png             filled yellow eye on ink square (window icons)
 //   build/icon.png (512)               source icon for electron-builder packaging
 import { deflateSync } from 'node:zlib'
 import { mkdirSync, writeFileSync } from 'node:fs'
@@ -101,9 +101,7 @@ const D = (W * W - H * H) / (2 * H)
 const R = D + H
 
 function inLens(u, v, shrink = 0) {
-  return (
-    dist(u, v, 0.5, 0.5 - D) <= R - shrink && dist(u, v, 0.5, 0.5 + D) <= R - shrink
-  )
+  return dist(u, v, 0.5, 0.5 - D) <= R - shrink && dist(u, v, 0.5, 0.5 + D) <= R - shrink
 }
 
 /** Line-art eye for tray icons (transparent background). */
@@ -117,23 +115,17 @@ function trayScene(color) {
   }
 }
 
-/** Filled eye on a rounded square for the app icon. */
+/** Filled eye on a sharp ink square for the app icon (twenty's yellow accent). */
 function appScene(u, v) {
-  // Rounded-rect background.
-  const cr = 0.18
-  const dx = Math.max(Math.abs(u - 0.5) - (0.5 - cr), 0)
-  const dy = Math.max(Math.abs(v - 0.5) - (0.5 - cr), 0)
-  if (Math.hypot(dx, dy) > cr) return [0, 0, 0, 0]
-
   const layers = [
-    [inLens(u, v), [0.16, 0.2, 0.24]], // lens outline
-    [inLens(u, v, 0.02), [0.95, 0.96, 0.98]], // sclera
-    [dist(u, v, 0.5, 0.5) <= 0.16 && inLens(u, v, 0.02), [0.17, 0.42, 0.69]], // iris rim
-    [dist(u, v, 0.5, 0.5) <= 0.135 && inLens(u, v, 0.02), [0.24, 0.55, 0.83]], // iris
-    [dist(u, v, 0.5, 0.5) <= 0.062, [0.06, 0.09, 0.11]], // pupil
+    [inLens(u, v), [0.24, 0.24, 0.23]], // lens outline
+    [inLens(u, v, 0.02), [0.95, 0.95, 0.95]], // sclera
+    [dist(u, v, 0.5, 0.5) <= 0.16 && inLens(u, v, 0.02), [0.78, 0.6, 0.12]], // iris rim
+    [dist(u, v, 0.5, 0.5) <= 0.135 && inLens(u, v, 0.02), [0.96, 0.77, 0.26]], // iris
+    [dist(u, v, 0.5, 0.5) <= 0.062, [0.047, 0.051, 0.043]], // pupil
     [dist(u, v, 0.55, 0.44) <= 0.028, [1, 1, 1]], // highlight
   ]
-  let color = [0.086, 0.137, 0.18] // background slate
+  let color = [0.047, 0.051, 0.043] // background ink #0c0d0b
   for (const [hit, c] of layers) if (hit) color = c
   return [...color, 1]
 }

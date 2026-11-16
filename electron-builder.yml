@@ -1,5 +1,5 @@
-appId: com.shady.eye202020
-productName: Eye 20-20-20
+appId: com.shady.twenty
+productName: twenty
 directories:
   output: release
   buildResources: build

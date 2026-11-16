@@ -1,4 +1,4 @@
-# Eye 20-20-20 — Development Guide
+# twenty — Development Guide
 
 Cross-platform (Windows/macOS/Linux) Electron + TypeScript tray app that enforces
 the 20-20-20 eye-care rule: dark overlays on **every** display, mouse confinement
@@ -9,7 +9,7 @@ during breaks, OS-level idle detection, fade-in + chime, snooze/pause from the t
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Dev app with HMR (regenerates icons first) |
-| `npm run dev:fast` | Dev app with seconds-scale timers (`EYE2020_FAST=1`: work 8s, hint 3s, break 4s) |
+| `npm run dev:fast` | Dev app with seconds-scale timers (`TWENTY_FAST=1`: work 8s, hint 3s, break 4s) |
 | `npm test` | Vitest unit tests (timer engine, settings, messages) |
 | `npm run typecheck` | `tsc --noEmit` (build does NOT typecheck — always run this) |
 | `npm run lint` / `npm run format` | ESLint / Prettier |
@@ -22,9 +22,9 @@ during breaks, OS-level idle detection, fade-in + chime, snooze/pause from the t
 or Electron runs as plain Node and crashes on `app.commandLine`. `scripts/smoke.mjs`
 already strips it.
 
-**Env flags:** `EYE2020_FAST=1` seconds-scale timers · `EYE2020_SMOKE=1` no real
+**Env flags:** `TWENTY_FAST=1` seconds-scale timers · `TWENTY_SMOKE=1` no real
 mouse lock, silent, translucent, isolated profile, 90s auto-exit ·
-`EYE2020_USERDATA=<dir>` isolated settings profile.
+`TWENTY_USERDATA=<dir>` isolated settings profile.
 
 ## Architecture (one screen)
 

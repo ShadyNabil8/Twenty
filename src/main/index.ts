@@ -11,16 +11,16 @@ import { SettingsWindow } from './settings-window'
 import { nextLocalMidnight, TimerEngine, type TimerConfig, type TimerEvent } from './timer'
 import { TrayController } from './tray'
 
-/** EYE2020_FAST=1: seconds-scale timings for manual testing and the smoke run. */
-const FAST = process.env.EYE2020_FAST === '1'
-/** EYE2020_SMOKE=1: no real mouse lock, quiet + translucent overlays, auto-exit. */
-const SMOKE = process.env.EYE2020_SMOKE === '1'
+/** TWENTY_FAST=1: seconds-scale timings for manual testing and the smoke run. */
+const FAST = process.env.TWENTY_FAST === '1'
+/** TWENTY_SMOKE=1: no real mouse lock, quiet + translucent overlays, auto-exit. */
+const SMOKE = process.env.TWENTY_SMOKE === '1'
 
 // The break chime must be able to play without a user gesture.
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
 
 // Isolated profile for smoke/test runs so they never touch real user settings.
-if (process.env.EYE2020_USERDATA) app.setPath('userData', process.env.EYE2020_USERDATA)
+if (process.env.TWENTY_USERDATA) app.setPath('userData', process.env.TWENTY_USERDATA)
 
 function toTimerConfig(s: Settings): TimerConfig {
   if (FAST) {
@@ -89,6 +89,7 @@ if (!app.requestSingleInstanceLock()) {
             // machine isn't blacked out mid-run.
             opacity: SMOKE ? Math.min(s.overlayOpacity, 0.3) : s.overlayOpacity,
             endsAt: ev.endsAt,
+            durationMs: toTimerConfig(s).breakMs,
             skippable: s.skippable,
             strict: s.strictBreaks,
             sound: s.soundEnabled && !SMOKE,

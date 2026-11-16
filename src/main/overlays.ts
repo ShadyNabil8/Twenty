@@ -8,6 +8,8 @@ export interface OverlayOptions {
   opacity: number
   /** Epoch ms when the break ends (renderer drives its own countdown). */
   endsAt: number
+  /** Total break length in ms, for the renderer's progress bar. */
+  durationMs: number
   skippable: boolean
   /** Strict break: the overlay offers no Esc handling at all. */
   strict: boolean
@@ -123,6 +125,7 @@ export class OverlayManager {
       message: this.opts.message,
       opacity: String(this.opts.opacity),
       endsAt: String(this.opts.endsAt),
+      duration: String(this.opts.durationMs),
       skippable: this.opts.skippable && !this.opts.strict ? '1' : '0',
       strict: this.opts.strict ? '1' : '0',
       sound: sound && isPrimary ? '1' : '0',

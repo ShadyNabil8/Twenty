@@ -1,9 +1,9 @@
 ---
 name: run
-description: Launch and drive the Eye 20-20-20 Electron app for development, demos, or verifying a change works in the real app. Covers dev mode, fast timers, smoke mode, and the ELECTRON_RUN_AS_NODE pitfall.
+description: Launch and drive the twenty Electron app for development, demos, or verifying a change works in the real app. Covers dev mode, fast timers, smoke mode, and the ELECTRON_RUN_AS_NODE pitfall.
 ---
 
-# Running Eye 20-20-20
+# Running twenty
 
 ## Pick the right mode
 
@@ -29,10 +29,10 @@ features on demand instead of waiting for timers.
   break ends. Recovery if needed: tap Esc (skippable breaks) or hold Esc 3 s
   (works unless **Strict breaks** is on — then only killing the process
   releases it). Never launch a real-jail run unattended — use
-  `EYE2020_SMOKE=1` for agent-driven runs.
+  `TWENTY_SMOKE=1` for agent-driven runs.
 - Agent-driven manual launches: build first (`npm run build`), then
   `node scripts/smoke.mjs` is the sanctioned launcher; it isolates the settings
-  profile (`EYE2020_USERDATA`) so the user's real settings are untouched.
+  profile (`TWENTY_USERDATA`) so the user's real settings are untouched.
 
 ## Reading the logs
 
@@ -49,5 +49,5 @@ The main process logs milestones to stdout:
 [e2e] break-end reason=completed|skipped|forced|preempted
 ```
 
-Settings land in `%APPDATA%/eye-202020/settings.json` (plus `state.json` for
-persisted snooze/pause) unless `EYE2020_USERDATA` overrides the location.
+Settings land in `%APPDATA%/twenty/settings.json` (plus `state.json` for
+persisted snooze/pause) unless `TWENTY_USERDATA` overrides the location.

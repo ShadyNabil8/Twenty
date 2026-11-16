@@ -1,4 +1,4 @@
-# Eye 20-20-20 Rule Desktop Application
+# twenty
 
 A cross-platform desktop application designed to help users prevent eye strain by enforcing the **20-20-20 rule**: every **20 minutes**, look at something **20 feet away** for at least **20 seconds**.
 

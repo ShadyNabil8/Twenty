@@ -1,100 +1,145 @@
-:root {
-  color-scheme: dark;
-}
+@import '../theme.css';
 
 html,
 body {
   margin: 0;
-  background: #10171e;
-  color: #dfe7ee;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  font-size: 15px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 header {
-  padding: 22px 26px 6px;
+  padding: 28px 28px 8px;
 }
 
 header h1 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
 }
 
 header p {
-  margin: 6px 0 0;
-  color: #8fa5b8;
-  font-size: 0.9rem;
+  margin: 8px 0 0;
+  color: var(--muted);
 }
 
 form {
-  padding: 8px 26px 26px;
+  padding: 0 28px;
 }
 
 section {
-  margin-top: 18px;
-  padding: 16px 18px;
-  border: 1px solid #22303d;
-  border-radius: 12px;
-  background: #141d26;
+  margin-top: 28px;
 }
 
 h2 {
-  margin: 0 0 12px;
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #7f95a8;
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
 }
 
-label {
-  display: block;
-  margin-bottom: 14px;
-}
-
-label:last-child {
-  margin-bottom: 2px;
-}
-
-label > span {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.92rem;
-}
-
-label.check {
-  display: flex;
+/* --- Rows: text left, control right, hairline between ------------------- */
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.row.stack {
+  grid-template-columns: 1fr;
   gap: 10px;
+  padding-bottom: 14px;
 }
 
-label.check > span {
-  margin: 0;
+label.row {
+  cursor: pointer;
 }
 
+.text {
+  color: var(--fg);
+}
+
+.desc {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.row:has(input:disabled) .text {
+  color: var(--muted);
+}
+
+.row:has(input:disabled) {
+  cursor: default;
+}
+
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unit {
+  min-width: 3ch;
+  color: var(--muted);
+}
+
+.unit.value {
+  min-width: 4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* --- Inputs -------------------------------------------------------------- */
 input[type='number'],
 textarea {
   box-sizing: border-box;
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #2b3a49;
-  border-radius: 8px;
-  background: #0e141b;
-  color: #dfe7ee;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--fg);
   font: inherit;
 }
 
 input[type='number'] {
-  max-width: 140px;
+  width: 72px;
+  height: 30px;
+  padding: 0 8px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type='number']:hover:not(:disabled),
+textarea:hover {
+  border-color: #ffffff47;
+}
+
+input[type='number']:disabled {
+  color: var(--muted);
+  background: var(--bg);
+  border-color: var(--border);
 }
 
 textarea {
+  width: 100%;
+  padding: 10px 12px;
   resize: vertical;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+input[type='number']:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
 }
 
 /* Each line picks its own direction, so English and Arabic messages can mix. */
@@ -103,62 +148,134 @@ textarea {
   text-align: start;
 }
 
+/* --- Square toggle (styled checkbox) ------------------------------------- */
+input.toggle {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 18px;
+  margin: 0;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+input.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  background: var(--muted);
+  transition:
+    transform 120ms ease,
+    background 120ms ease;
+}
+
+input.toggle:checked {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+input.toggle:checked::after {
+  transform: translateX(16px);
+  background: var(--accent);
+}
+
+input.toggle:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* --- Range: 2px track, square thumb -------------------------------------- */
 input[type='range'] {
-  width: 100%;
-  accent-color: #4a90d9;
+  appearance: none;
+  width: 168px;
+  height: 18px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-input:focus-visible,
-textarea:focus-visible,
-button:focus-visible {
-  outline: 2px solid #4a90d9;
-  outline-offset: 1px;
+input[type='range']::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--border-strong);
 }
 
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -5px;
+  border: none;
+  background: var(--accent);
+}
+
+input[type='range']:hover::-webkit-slider-thumb {
+  background: var(--accent-hover);
+}
+
+/* --- Footer: sticky action bar ------------------------------------------- */
 footer {
-  margin-top: 20px;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 28px -28px 0;
+  padding: 14px 28px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.footnote p {
+  margin: 0;
+}
+
+#status {
+  min-height: 1.5em;
+  color: var(--accent);
+}
+
+.note {
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .buttons {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+  flex: none;
+  gap: 8px;
 }
 
 button {
-  padding: 9px 18px;
-  border: 1px solid #2b3a49;
-  border-radius: 8px;
-  background: #1b2733;
-  color: #dfe7ee;
+  height: 34px;
+  padding: 0 16px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--fg);
   font: inherit;
   cursor: pointer;
 }
 
 button:hover {
-  background: #22303d;
+  background: var(--hover);
 }
 
 button.primary {
-  border-color: #3d8bd4;
-  background: #2b6cb0;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
 }
 
 button.primary:hover {
-  background: #3d8bd4;
-}
-
-#status {
-  min-height: 1.2em;
-  margin: 0 0 8px;
-  text-align: right;
-  font-size: 0.85rem;
-  color: #7fc98f;
-}
-
-.note {
-  margin: 10px 0 0;
-  text-align: right;
-  font-size: 0.8rem;
-  color: #63788b;
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
 }

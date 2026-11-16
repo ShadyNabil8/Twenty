@@ -82,14 +82,14 @@ form.addEventListener('submit', (e) => {
   e.preventDefault()
   void window.eye.setSettings(collect()).then((applied) => {
     populate(applied)
-    flash('Saved ✓')
+    flash('Saved')
   })
 })
 
 $<HTMLButtonElement>('reset').addEventListener('click', () => {
   void window.eye.setSettings(null).then((applied) => {
     populate(applied)
-    flash('Defaults restored ✓')
+    flash('Defaults restored')
   })
 })
 

@@ -1,4 +1,4 @@
-# Agent Rules — Eye 20-20-20
+# Agent Rules — twenty
 
 Project-scoped rules for AI coding agents working in this repository.
 `CLAUDE.md` at the repo root is the primary guide (commands, architecture,
@@ -11,9 +11,9 @@ style, safety invariants) — read it first. This file adds workflow rules.
    The smoke test launches the real app and flashes translucent overlays for a
    few seconds on the local machine — that is expected and by design.
 2. **Never run the app with a live mouse jail unattended.** Real-jail testing
-   (no `EYE2020_SMOKE`) freezes the user's cursor; leave that to the human via
+   (no `TWENTY_SMOKE`) freezes the user's cursor; leave that to the human via
    the manual checklist in `.claude/skills/verify/SKILL.md`. Agent-driven runs
-   must set `EYE2020_SMOKE=1` (and usually `EYE2020_FAST=1`).
+   must set `TWENTY_SMOKE=1` (and usually `TWENTY_FAST=1`).
 3. **IDE environments:** strip `ELECTRON_RUN_AS_NODE` from the environment for
    any process that must run as a real Electron app.
 4. Timer or settings behavior changes require a matching unit test in `tests/`.

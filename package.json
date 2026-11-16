@@ -1,5 +1,5 @@
 {
-  "name": "eye-202020",
+  "name": "twenty",
   "version": "0.1.0",
   "description": "Cross-platform 20-20-20 eye-strain break enforcer: dark overlays on every screen, mouse confinement, idle-aware timer, tray countdown.",
   "main": "out/main/index.js",
@@ -9,7 +9,7 @@
   "scripts": {
     "predev": "npm run icons",
     "dev": "electron-vite dev",
-    "dev:fast": "npm run icons && cross-env EYE2020_FAST=1 electron-vite dev",
+    "dev:fast": "npm run icons && cross-env TWENTY_FAST=1 electron-vite dev",
     "prebuild": "npm run icons",
     "build": "electron-vite build",
     "typecheck": "tsc --noEmit",

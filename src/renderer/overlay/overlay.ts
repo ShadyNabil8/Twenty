@@ -5,6 +5,7 @@ const params = new URLSearchParams(location.search)
 const message = params.get('message') ?? 'Look at something 20 feet away.'
 const opacity = Number(params.get('opacity') ?? '0.92')
 const endsAt = Number(params.get('endsAt') ?? '0')
+const durationMs = Number(params.get('duration') ?? '0')
 const strict = params.get('strict') === '1'
 const skippable = !strict && params.get('skippable') === '1'
 const sound = params.get('sound') === '1'
@@ -17,6 +18,7 @@ const countdownEl = document.getElementById('countdown') as HTMLDivElement
 const escapeHintEl = document.getElementById('escape-hint') as HTMLParagraphElement
 const holdProgress = document.getElementById('hold-progress') as HTMLDivElement
 const holdBar = document.getElementById('hold-bar') as HTMLDivElement
+const edgeBar = document.getElementById('edge-bar') as HTMLDivElement
 ;(document.getElementById('message') as HTMLHeadingElement).textContent = message
 
 escapeHintEl.textContent = strict
@@ -55,15 +57,35 @@ window.eye.onFadeOut(() => {
   veil.style.opacity = '0'
 })
 
-// --- Countdown -------------------------------------------------------------
+// --- Countdown + edge progress bar ----------------------------------------
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+function remainingFraction(): number {
+  if (!(durationMs > 0)) return 0
+  return Math.min(1, Math.max(0, (endsAt - Date.now()) / durationMs))
+}
+
 function renderCountdown(): void {
   const left = Math.max(0, Math.ceil((endsAt - Date.now()) / 1000))
   const m = Math.floor(left / 60)
   const s = left % 60
   countdownEl.textContent = m > 0 ? `${m}:${String(s).padStart(2, '0')}` : String(s)
+  if (reduceMotion) edgeBar.style.transform = `scaleX(${remainingFraction()})`
 }
 renderCountdown()
 window.setInterval(renderCountdown, 250)
+
+// One linear transition from "now" to empty keeps every display in sync,
+// including overlays created mid-break by a display hotplug.
+edgeBar.style.transform = `scaleX(${remainingFraction()})`
+if (!reduceMotion) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      edgeBar.style.transitionDuration = `${Math.max(0, endsAt - Date.now())}ms`
+      edgeBar.style.transform = 'scaleX(0)'
+    })
+  })
+}
 
 // --- Esc handling: tap to skip (if allowed), hold to force-end -------------
 // Strict breaks register no Esc handling at all (main also ignores the IPC).
