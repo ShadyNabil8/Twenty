@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Verify a change to Eye 20-20-20 end-to-end - typecheck, lint, unit tests, and the real-app smoke cycle - plus the manual multi-monitor checklist for jail/overlay changes.
+description: Verify a change to twenty end-to-end - typecheck, lint, unit tests, and the real-app smoke cycle - plus the manual multi-monitor checklist for jail/overlay changes.
 ---
 
 # Verifying changes

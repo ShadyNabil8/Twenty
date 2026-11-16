@@ -14,7 +14,7 @@ import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
 
 // Default: dev electron + this project. Optional argv[2]: path to a packaged
-// binary (e.g. "release/win-unpacked/Eye 20-20-20.exe") to smoke-test a build.
+// binary (e.g. "release/win-unpacked/twenty.exe") to smoke-test a build.
 const packagedBinary = process.argv[2]
 const electron = packagedBinary ?? require('electron') // path to the electron binary
 const args = packagedBinary ? [] : ['.']
@@ -33,13 +33,13 @@ const EXPECTED = [
 ]
 
 const TIMEOUT_MS = 75_000
-const userData = mkdtempSync(join(tmpdir(), 'eye2020-smoke-'))
+const userData = mkdtempSync(join(tmpdir(), 'twenty-smoke-'))
 
 const env = {
   ...process.env,
-  EYE2020_FAST: '1',
-  EYE2020_SMOKE: '1',
-  EYE2020_USERDATA: userData,
+  TWENTY_FAST: '1',
+  TWENTY_SMOKE: '1',
+  TWENTY_USERDATA: userData,
 }
 // IDE terminals (VS Code extension hosts, etc.) export this; it would make the
 // Electron binary run as plain Node and crash the app immediately.

@@ -1,3 +1,5 @@
+@import '../theme.css';
+
 html,
 body {
   margin: 0;
@@ -5,33 +7,27 @@ body {
   overflow: hidden;
   background: transparent;
   user-select: none;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--font);
 }
 
 #card {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   height: calc(100% - 12px);
   margin: 6px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid #2b3a49;
-  background: rgba(16, 23, 30, 0.96);
-  color: #dfe7ee;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-  animation: slide-in 300ms ease-out;
+  padding: 14px 12px 14px 18px;
+  border: 1px solid var(--border-strong);
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+  color: var(--fg);
+  animation: slide-in 260ms ease-out;
 }
 
 @keyframes slide-in {
   from {
-    transform: translateY(12px);
+    transform: translateY(10px);
     opacity: 0;
   }
   to {
@@ -40,48 +36,64 @@ body {
   }
 }
 
-#eye {
-  font-size: 1.8rem;
+@media (prefers-reduced-motion: reduce) {
+  #card {
+    animation: none;
+  }
+}
+
+#countdown {
+  flex: none;
+  min-width: 3ch;
+  font-size: 2rem;
+  font-weight: 300;
   line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
 }
 
 #content {
   flex: 1;
   min-width: 0;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
 }
 
 #title {
   margin: 0 0 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #9fc1de;
-}
-
-#countdown {
-  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 #message {
   margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  color: #c4d2dd;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--fg-2);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 #dismiss {
   flex: none;
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: 50%;
-  background: #243240;
-  color: #8fa5b8;
-  font-size: 0.8rem;
+  align-self: flex-start;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
   cursor: pointer;
 }
 
 #dismiss:hover {
-  background: #31445a;
-  color: #dfe7ee;
+  border-color: var(--border-strong);
+  background: var(--hover);
+  color: var(--fg);
 }
