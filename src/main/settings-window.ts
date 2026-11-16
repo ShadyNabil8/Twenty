@@ -1,11 +1,12 @@
 import { BrowserWindow, nativeImage } from 'electron'
+import type { Language } from '../shared/types'
 import { loadPage, preloadPath } from './pages'
 import appIcon from '../../resources/icon-256.png?asset'
 
 export class SettingsWindow {
   private win: BrowserWindow | null = null
 
-  open(): void {
+  open(lang: Language): void {
     if (this.win && !this.win.isDestroyed()) {
       this.win.show()
       this.win.focus()
@@ -28,7 +29,7 @@ export class SettingsWindow {
         sandbox: false,
       },
     })
-    loadPage(win, 'settings')
+    loadPage(win, 'settings', { lang })
     win.once('ready-to-show', () => {
       if (!win.isDestroyed()) win.show()
     })

@@ -17,9 +17,10 @@ body {
   gap: 16px;
   height: calc(100% - 12px);
   margin: 6px;
-  padding: 14px 12px 14px 18px;
+  padding-block: 14px;
+  padding-inline: 18px 12px;
   border: 1px solid var(--border-strong);
-  border-left: 2px solid var(--accent);
+  border-inline-start: 2px solid var(--accent);
   background: var(--surface);
   color: var(--fg);
   animation: slide-in 260ms ease-out;
@@ -56,8 +57,8 @@ body {
 #content {
   flex: 1;
   min-width: 0;
-  padding-left: 16px;
-  border-left: 1px solid var(--border);
+  padding-inline-start: 16px;
+  border-inline-start: 1px solid var(--border);
 }
 
 #title {

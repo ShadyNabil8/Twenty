@@ -1,8 +1,15 @@
-import { ESC_HOLD_MS } from '../../shared/defaults'
+import { DEFAULT_MESSAGES, ESC_HOLD_MS } from '../../shared/defaults'
+import { dirFor, formatCountdown, isLanguage, STRINGS } from '../../shared/i18n'
 import { playChime } from '../chime'
 
 const params = new URLSearchParams(location.search)
-const message = params.get('message') ?? 'Look at something 20 feet away.'
+const langParam = params.get('lang')
+const lang = isLanguage(langParam) ? langParam : 'en'
+const t = STRINGS[lang].overlay
+document.documentElement.lang = lang
+document.documentElement.dir = dirFor(lang)
+
+const message = params.get('message') ?? DEFAULT_MESSAGES[0] ?? ''
 const opacity = Number(params.get('opacity') ?? '0.92')
 const endsAt = Number(params.get('endsAt') ?? '0')
 const durationMs = Number(params.get('duration') ?? '0')
@@ -20,12 +27,13 @@ const holdProgress = document.getElementById('hold-progress') as HTMLDivElement
 const holdBar = document.getElementById('hold-bar') as HTMLDivElement
 const edgeBar = document.getElementById('edge-bar') as HTMLDivElement
 ;(document.getElementById('message') as HTMLHeadingElement).textContent = message
+;(document.getElementById('kicker') as HTMLParagraphElement).textContent = t.kicker
 
 escapeHintEl.textContent = strict
-  ? "This break can't be skipped"
+  ? t.strict
   : skippable
-    ? 'Press Esc to skip this break'
-    : 'Hold Esc for 3 seconds to end the break in an emergency'
+    ? t.skippable
+    : t.holdEsc(Math.round(ESC_HOLD_MS / 1000))
 
 // --- Fade in (CSS transition; portable across platforms) ------------------
 let fadedIn = false
@@ -67,9 +75,7 @@ function remainingFraction(): number {
 
 function renderCountdown(): void {
   const left = Math.max(0, Math.ceil((endsAt - Date.now()) / 1000))
-  const m = Math.floor(left / 60)
-  const s = left % 60
-  countdownEl.textContent = m > 0 ? `${m}:${String(s).padStart(2, '0')}` : String(s)
+  countdownEl.textContent = formatCountdown(left, lang, false)
   if (reduceMotion) edgeBar.style.transform = `scaleX(${remainingFraction()})`
 }
 renderCountdown()

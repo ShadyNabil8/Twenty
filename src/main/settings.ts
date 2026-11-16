@@ -1,5 +1,6 @@
 import { join } from 'node:path'
 import { DEFAULT_SETTINGS, LIMITS } from '../shared/defaults'
+import { isLanguage } from '../shared/i18n'
 import type { Settings, SuspendState } from '../shared/types'
 import { readJson, writeJson } from './persist'
 
@@ -28,7 +29,13 @@ export function validateSettings(raw: unknown): Settings {
   const d = DEFAULT_SETTINGS
   return {
     version: 1,
-    workMinutes: clamp(r.workMinutes, LIMITS.workMinutes.min, LIMITS.workMinutes.max, d.workMinutes),
+    language: isLanguage(r.language) ? r.language : d.language,
+    workMinutes: clamp(
+      r.workMinutes,
+      LIMITS.workMinutes.min,
+      LIMITS.workMinutes.max,
+      d.workMinutes,
+    ),
     breakSeconds: clamp(
       r.breakSeconds,
       LIMITS.breakSeconds.min,

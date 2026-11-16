@@ -13,6 +13,7 @@ export const DEFAULT_MESSAGES: readonly string[] = [
 
 export const DEFAULT_SETTINGS: Settings = {
   version: 1,
+  language: 'en',
   workMinutes: 20,
   breakSeconds: 20,
   overlayOpacity: 0.92,

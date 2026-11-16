@@ -1,6 +1,7 @@
 import { BrowserWindow, screen, type Display } from 'electron'
 import { FADE_IN_MS, FADE_OUT_MS } from '../shared/defaults'
 import { IPC } from '../shared/ipc'
+import type { Language } from '../shared/types'
 import { loadPage, preloadPath } from './pages'
 
 export interface OverlayOptions {
@@ -14,6 +15,7 @@ export interface OverlayOptions {
   /** Strict break: the overlay offers no Esc handling at all. */
   strict: boolean
   sound: boolean
+  lang: Language
 }
 
 /**
@@ -132,6 +134,7 @@ export class OverlayManager {
       primary: isPrimary ? '1' : '0',
       fadeIn: String(FADE_IN_MS),
       fadeOut: String(FADE_OUT_MS),
+      lang: this.opts.lang,
     })
 
     win.once('ready-to-show', () => {

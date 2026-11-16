@@ -1,4 +1,5 @@
 import { BrowserWindow, screen } from 'electron'
+import type { Language } from '../shared/types'
 import { loadPage, preloadPath } from './pages'
 
 const WIDTH = 380
@@ -12,7 +13,7 @@ const MARGIN = 16
 export class HintWindow {
   private win: BrowserWindow | null = null
 
-  show(message: string, breakAt: number): void {
+  show(message: string, breakAt: number, lang: Language): void {
     this.close()
     const wa = screen.getPrimaryDisplay().workArea
     const win = new BrowserWindow({
@@ -40,7 +41,7 @@ export class HintWindow {
     })
     win.setAlwaysOnTop(true, 'status')
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
-    loadPage(win, 'hint', { message, breakAt: String(breakAt) })
+    loadPage(win, 'hint', { message, breakAt: String(breakAt), lang })
     win.once('ready-to-show', () => {
       if (!win.isDestroyed()) win.showInactive()
     })

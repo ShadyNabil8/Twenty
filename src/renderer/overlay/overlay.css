@@ -55,6 +55,11 @@ main {
   color: var(--fg);
 }
 
+/* Arabic-Indic ٠ and ٥ are small marks; a hairline weight makes them vanish. */
+#countdown:lang(ar) {
+  font-weight: 400;
+}
+
 #escape-hint {
   margin: 1.5rem 0 0;
   font-size: 13px;
@@ -96,4 +101,9 @@ main {
   transform-origin: left center;
   transition-property: transform;
   transition-timing-function: linear;
+}
+
+/* RTL: mirror the bar so it stays anchored to the right edge as it drains. */
+[dir='rtl'] #edge-bar {
+  transform-origin: right center;
 }
