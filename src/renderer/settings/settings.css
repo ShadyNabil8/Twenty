@@ -27,6 +27,69 @@ header p {
   color: var(--muted);
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* The brand name stays Latin and left-to-right in both languages. */
+header h1 {
+  direction: ltr;
+}
+
+/* --- Language switch: two-segment radio control ------------------------- */
+.lang-switch {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--border-strong);
+}
+
+.lang-switch label {
+  position: relative;
+  cursor: pointer;
+}
+
+.lang-switch input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.lang-switch span {
+  display: block;
+  padding: 4px 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.lang-switch span[lang='ar'] {
+  font-family: 'Cairo', sans-serif;
+}
+
+.lang-switch span[lang='en'] {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.lang-switch label:hover span {
+  color: var(--fg);
+  background: var(--hover);
+}
+
+.lang-switch input:checked + span {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.lang-switch input:focus-visible + span {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
 form {
   padding: 0 28px;
 }
@@ -95,7 +158,7 @@ label.row {
 
 .unit.value {
   min-width: 4ch;
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
   color: var(--fg);
 }
@@ -114,7 +177,7 @@ input[type='number'] {
   width: 72px;
   height: 30px;
   padding: 0 8px;
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
 }
 
@@ -168,7 +231,7 @@ input.toggle::after {
   content: '';
   position: absolute;
   top: 3px;
-  left: 3px;
+  inset-inline-start: 3px;
   width: 10px;
   height: 10px;
   background: var(--muted);
@@ -185,6 +248,10 @@ input.toggle:checked {
 input.toggle:checked::after {
   transform: translateX(16px);
   background: var(--accent);
+}
+
+[dir='rtl'] input.toggle:checked::after {
+  transform: translateX(-16px);
 }
 
 input.toggle:disabled {

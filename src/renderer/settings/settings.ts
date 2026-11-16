@@ -1,4 +1,12 @@
-import type { Settings } from '../../shared/types'
+import { DEFAULT_SETTINGS } from '../../shared/defaults'
+import {
+  dirFor,
+  isLanguage,
+  localizeDigits,
+  STRINGS,
+  type SettingsStringKey,
+} from '../../shared/i18n'
+import type { Language, Settings } from '../../shared/types'
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T
 
@@ -16,8 +24,29 @@ const hintLeadSeconds = $<HTMLInputElement>('hintLeadSeconds')
 const idlePauseMinutes = $<HTMLInputElement>('idlePauseMinutes')
 const openAtLogin = $<HTMLInputElement>('openAtLogin')
 const status = $<HTMLElement>('status')
+const langRadios = [...document.querySelectorAll<HTMLInputElement>('input[name="language"]')]
+
+const langParam = new URLSearchParams(location.search).get('lang')
+let lang: Language = isLanguage(langParam) ? langParam : 'en'
+
+/** Relabel the page in place — never touches form values, so unsaved edits survive. */
+function applyLanguage(next: Language): void {
+  lang = next
+  const strings = STRINGS[lang].settings
+  document.documentElement.lang = lang
+  document.documentElement.dir = dirFor(lang)
+  document.title = strings.windowTitle
+  for (const el of document.querySelectorAll<HTMLElement>('[data-i18n]')) {
+    const key = el.dataset.i18n as SettingsStringKey
+    if (key in strings) el.textContent = strings[key]
+  }
+  $<HTMLElement>('langSwitch').setAttribute('aria-label', strings.language)
+  for (const r of langRadios) r.checked = r.value === lang
+  updateOpacityLabel()
+}
 
 function populate(s: Settings): void {
+  if (s.language !== lang) applyLanguage(s.language)
   workMinutes.value = String(s.workMinutes)
   breakSeconds.value = String(s.breakSeconds)
   skippable.checked = s.skippable
@@ -41,7 +70,7 @@ function syncStrict(): void {
 }
 
 function updateOpacityLabel(): void {
-  opacityValue.textContent = `${overlayOpacity.value}%`
+  opacityValue.textContent = localizeDigits(`${overlayOpacity.value}%`, lang)
 }
 
 function collect(): Partial<Settings> {
@@ -82,19 +111,31 @@ form.addEventListener('submit', (e) => {
   e.preventDefault()
   void window.eye.setSettings(collect()).then((applied) => {
     populate(applied)
-    flash('Saved')
+    flash(STRINGS[lang].status.saved)
   })
 })
 
 $<HTMLButtonElement>('reset').addEventListener('click', () => {
-  void window.eye.setSettings(null).then((applied) => {
+  // Restoring defaults keeps the chosen language.
+  void window.eye.setSettings({ ...DEFAULT_SETTINGS, language: lang }).then((applied) => {
     populate(applied)
-    flash('Defaults restored')
+    flash(STRINGS[lang].status.defaultsRestored)
   })
 })
+
+for (const radio of langRadios) {
+  radio.addEventListener('change', () => {
+    if (!radio.checked || !isLanguage(radio.value)) return
+    // Applied and saved right away; only the language is patched, so the
+    // rest of the form keeps any unsaved edits.
+    applyLanguage(radio.value)
+    void window.eye.setSettings({ language: radio.value })
+  })
+}
 
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') window.eye.closeSettings()
 })
 
+applyLanguage(lang)
 void window.eye.getSettings().then(populate)

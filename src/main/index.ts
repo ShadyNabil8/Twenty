@@ -45,6 +45,13 @@ function toTimerConfig(s: Settings): TimerConfig {
   }
 }
 
+function onlyLanguageChanged(a: Settings, b: Settings): boolean {
+  return (
+    a.language !== b.language &&
+    JSON.stringify({ ...a, language: b.language }) === JSON.stringify(b)
+  )
+}
+
 if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {
@@ -75,7 +82,7 @@ if (!app.requestSingleInstanceLock()) {
     for (const ev of events) {
       switch (ev.type) {
         case 'hint':
-          hint.show(pickMessage(store.get().messages), ev.breakAt)
+          hint.show(pickMessage(store.get().messages), ev.breakAt, store.get().language)
           break
         case 'hint-cancel':
           hint.close()
@@ -93,6 +100,7 @@ if (!app.requestSingleInstanceLock()) {
             skippable: s.skippable,
             strict: s.strictBreaks,
             sound: s.soundEnabled && !SMOKE,
+            lang: s.language,
           })
           console.log(`[e2e] break-start displays=${screen.getAllDisplays().length}`)
           break
@@ -116,7 +124,9 @@ if (!app.requestSingleInstanceLock()) {
     app.setLoginItemSettings({ openAtLogin: s.openAtLogin })
   }
 
-  app.on('second-instance', () => settingsWindow.open())
+  const openSettings = (): void => settingsWindow.open(store.get().language)
+
+  app.on('second-instance', () => openSettings())
 
   // Tray app: closing the last window must not quit.
   app.on('window-all-closed', () => {})
@@ -138,19 +148,23 @@ if (!app.requestSingleInstanceLock()) {
     overlays = new OverlayManager()
     hint = new HintWindow()
     settingsWindow = new SettingsWindow()
-    tray = new TrayController(() => engine.snapshot(Date.now()), {
-      breakNow: () => dispatch(engine.startBreakNow(Date.now())),
-      snooze: () => dispatch(engine.suspend(Date.now() + SNOOZE_MS, 'snooze', Date.now())),
-      pauseUntilTomorrow: () =>
-        dispatch(engine.suspend(nextLocalMidnight(Date.now()), 'until-tomorrow', Date.now())),
-      resume: () => dispatch(engine.resume(Date.now())),
-      openSettings: () => settingsWindow.open(),
-      quit: () => {
-        releaseJail()
-        overlays.destroyAll()
-        app.quit()
+    tray = new TrayController(
+      () => engine.snapshot(Date.now()),
+      () => store.get().language,
+      {
+        breakNow: () => dispatch(engine.startBreakNow(Date.now())),
+        snooze: () => dispatch(engine.suspend(Date.now() + SNOOZE_MS, 'snooze', Date.now())),
+        pauseUntilTomorrow: () =>
+          dispatch(engine.suspend(nextLocalMidnight(Date.now()), 'until-tomorrow', Date.now())),
+        resume: () => dispatch(engine.resume(Date.now())),
+        openSettings,
+        quit: () => {
+          releaseJail()
+          overlays.destroyAll()
+          app.quit()
+        },
       },
-    })
+    )
 
     overlays.onRendererGone = () => {
       // An overlay crashed while the mouse may be locked: abort the break.
@@ -165,9 +179,16 @@ if (!app.requestSingleInstanceLock()) {
       }
     }
 
+    let lastSettings = store.get()
     store.onChange((s) => {
-      dispatch(engine.applyConfig(toTimerConfig(s), Date.now()))
-      applyLoginItem(s)
+      const prev = lastSettings
+      lastSettings = s
+      if (s.language !== prev.language) console.log(`[e2e] language lang=${s.language}`)
+      // A language switch alone must not restart the current work period.
+      if (!onlyLanguageChanged(prev, s)) {
+        dispatch(engine.applyConfig(toTimerConfig(s), Date.now()))
+        applyLoginItem(s)
+      }
       tray.refresh()
     })
 

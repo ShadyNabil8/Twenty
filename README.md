@@ -28,6 +28,11 @@ always runs its full length, and the only way out is ending the process (e.g.
 Task Manager via Ctrl+Alt+Del), which releases the mouse. Settings, snooze ("Snooze for 1 Hour") and "Pause Until Tomorrow"
 live in the tray menu.
 
+The UI is available in **English** and **Arabic** (switch at the top of
+Settings). Arabic uses the Cairo font, right-to-left layout and Arabic-Indic
+digits across Settings, the break overlay, the hint toast and the tray menu.
+Break messages are yours to edit in either language.
+
 ### Platform notes
 
 | | Overlays | Mouse confinement | Idle detection |

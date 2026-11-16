@@ -1,5 +1,6 @@
 import { Menu, Tray, nativeImage, type MenuItemConstructorOptions } from 'electron'
-import type { TimerSnapshot } from '../shared/types'
+import { formatCountdown, localizeDigits, STRINGS } from '../shared/i18n'
+import type { Language, TimerSnapshot } from '../shared/types'
 import trayWinIcon from '../../resources/tray-16.png?asset'
 import trayLinuxIcon from '../../resources/tray-24.png?asset'
 import trayMacIcon from '../../resources/trayTemplate.png?asset'
@@ -13,28 +14,27 @@ export interface TrayActions {
   quit(): void
 }
 
-function fmt(ms: number): string {
-  const total = Math.max(0, Math.round(ms / 1000))
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return m > 0 ? `${m}:${String(s).padStart(2, '0')}` : `${s}s`
+function fmt(ms: number, lang: Language): string {
+  return formatCountdown(Math.round(ms / 1000), lang, true)
 }
 
-export function statusText(snap: TimerSnapshot): string {
+export function statusText(snap: TimerSnapshot, lang: Language): string {
+  const t = STRINGS[lang].tray
   switch (snap.phase) {
     case 'working':
-      return `Next break in ${fmt(snap.msUntilBreak ?? 0)}`
+      return t.nextBreakIn(fmt(snap.msUntilBreak ?? 0, lang))
     case 'break':
-      return `Break — ${fmt(snap.msUntilBreakEnd ?? 0)} left`
+      return t.breakLeft(fmt(snap.msUntilBreakEnd ?? 0, lang))
     case 'idle':
-      return 'Paused — away from keyboard'
-    case 'suspended':
-      return snap.suspendReason === 'until-tomorrow'
-        ? 'Paused until tomorrow'
-        : `Snoozed until ${new Date(snap.suspendedUntil ?? 0).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}`
+      return t.idle
+    case 'suspended': {
+      if (snap.suspendReason === 'until-tomorrow') return t.untilTomorrow
+      const time = new Date(snap.suspendedUntil ?? 0).toLocaleTimeString(
+        lang === 'ar' ? 'ar-EG' : [],
+        { hour: '2-digit', minute: '2-digit' },
+      )
+      return t.snoozedUntil(localizeDigits(time, lang))
+    }
   }
 }
 
@@ -44,6 +44,7 @@ export class TrayController {
 
   constructor(
     private getSnapshot: () => TimerSnapshot,
+    private getLanguage: () => Language,
     private actions: TrayActions,
   ) {
     const iconPath =
@@ -62,28 +63,30 @@ export class TrayController {
 
   refresh(): void {
     const snap = this.getSnapshot()
-    const status = statusText(snap)
+    const lang = this.getLanguage()
+    const t = STRINGS[lang].tray
+    const status = statusText(snap, lang)
     this.tray.setToolTip(`twenty — ${status}`)
 
     const items: MenuItemConstructorOptions[] = [
       { label: status, enabled: false },
       { type: 'separator' },
       {
-        label: 'Take a Break Now',
+        label: t.breakNow,
         enabled: snap.phase !== 'break',
         click: () => this.actions.breakNow(),
       },
-      { label: 'Snooze for 1 Hour', click: () => this.actions.snooze() },
-      { label: 'Pause Until Tomorrow', click: () => this.actions.pauseUntilTomorrow() },
+      { label: t.snooze, click: () => this.actions.snooze() },
+      { label: t.pauseUntilTomorrow, click: () => this.actions.pauseUntilTomorrow() },
     ]
     if (snap.phase === 'suspended' || snap.phase === 'idle') {
-      items.push({ label: 'Resume Now', click: () => this.actions.resume() })
+      items.push({ label: t.resume, click: () => this.actions.resume() })
     }
     items.push(
       { type: 'separator' },
-      { label: 'Settings…', click: () => this.actions.openSettings() },
+      { label: t.settings, click: () => this.actions.openSettings() },
       { type: 'separator' },
-      { label: 'Quit twenty', click: () => this.actions.quit() },
+      { label: t.quit, click: () => this.actions.quit() },
     )
     this.tray.setContextMenu(Menu.buildFromTemplate(items))
   }

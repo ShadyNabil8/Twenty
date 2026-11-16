@@ -7,91 +7,113 @@
   </head>
   <body>
     <header>
-      <h1>twenty</h1>
-      <p>Every 20 minutes, look at something 20 feet away for 20 seconds.</p>
+      <div class="title-row">
+        <h1>twenty</h1>
+        <div class="lang-switch" role="radiogroup" id="langSwitch" aria-label="Language">
+          <label>
+            <input type="radio" name="language" value="en" />
+            <span lang="en" dir="ltr">English</span>
+          </label>
+          <label>
+            <input type="radio" name="language" value="ar" />
+            <span lang="ar" dir="rtl">العربية</span>
+          </label>
+        </div>
+      </div>
+      <p data-i18n="tagline">Every 20 minutes, look at something 20 feet away for 20 seconds.</p>
     </header>
 
     <form id="form">
       <section>
-        <h2>Timer</h2>
+        <h2 data-i18n="sectionTimer">Timer</h2>
         <div class="row">
-          <label class="text" for="workMinutes">Work period</label>
+          <label class="text" for="workMinutes" data-i18n="workPeriod">Work period</label>
           <span class="field">
             <input type="number" id="workMinutes" min="1" max="240" step="1" required />
-            <span class="unit">min</span>
+            <span class="unit" data-i18n="unitMin">min</span>
           </span>
         </div>
         <div class="row">
-          <label class="text" for="breakSeconds">Break length</label>
+          <label class="text" for="breakSeconds" data-i18n="breakLength">Break length</label>
           <span class="field">
             <input type="number" id="breakSeconds" min="5" max="600" step="5" required />
-            <span class="unit">s</span>
+            <span class="unit" data-i18n="unitSec">s</span>
           </span>
         </div>
         <label class="row">
-          <span class="text">Allow skipping breaks with Esc</span>
+          <span class="text" data-i18n="skippable">Allow skipping breaks with Esc</span>
           <input type="checkbox" id="skippable" class="toggle" />
         </label>
         <label class="row">
           <span class="text">
-            Strict breaks
-            <span class="desc">No way to end a break early, not even by holding Esc.</span>
+            <span data-i18n="strictBreaks">Strict breaks</span>
+            <span class="desc" data-i18n="strictBreaksDesc"
+              >No way to end a break early, not even by holding Esc.</span
+            >
           </span>
           <input type="checkbox" id="strictBreaks" class="toggle" />
         </label>
       </section>
 
       <section>
-        <h2>Overlay</h2>
+        <h2 data-i18n="sectionOverlay">Overlay</h2>
         <div class="row">
-          <label class="text" for="overlayOpacity">Overlay opacity</label>
+          <label class="text" for="overlayOpacity" data-i18n="overlayOpacity"
+            >Overlay opacity</label
+          >
           <span class="field">
             <input type="range" id="overlayOpacity" min="30" max="100" step="1" />
             <span class="unit value" id="opacityValue">92%</span>
           </span>
         </div>
         <label class="row">
-          <span class="text">Play a soft chime when the break starts</span>
+          <span class="text" data-i18n="sound">Play a soft chime when the break starts</span>
           <input type="checkbox" id="soundEnabled" class="toggle" />
         </label>
         <div class="row stack">
           <label class="text" for="messages">
-            Messages
-            <span class="desc">One per line. A random one is shown on each break.</span>
+            <span data-i18n="messages">Messages</span>
+            <span class="desc" data-i18n="messagesDesc"
+              >One per line. A random one is shown on each break.</span
+            >
           </label>
           <textarea id="messages" rows="7" spellcheck="false"></textarea>
         </div>
       </section>
 
       <section>
-        <h2>Pre-break hint</h2>
+        <h2 data-i18n="sectionHint">Pre-break hint</h2>
         <label class="row">
-          <span class="text">Show a small hint before the break</span>
+          <span class="text" data-i18n="hintEnabled">Show a small hint before the break</span>
           <input type="checkbox" id="hintEnabled" class="toggle" />
         </label>
         <div class="row">
-          <label class="text" for="hintLeadSeconds">Show the hint this long before</label>
+          <label class="text" for="hintLeadSeconds" data-i18n="hintLead"
+            >Show the hint this long before</label
+          >
           <span class="field">
             <input type="number" id="hintLeadSeconds" min="5" max="300" step="5" required />
-            <span class="unit">s</span>
+            <span class="unit" data-i18n="unitSec">s</span>
           </span>
         </div>
       </section>
 
       <section>
-        <h2>Activity</h2>
+        <h2 data-i18n="sectionActivity">Activity</h2>
         <div class="row">
           <label class="text" for="idlePauseMinutes">
-            Pause the timer after inactivity
-            <span class="desc">The work period starts over when you're back.</span>
+            <span data-i18n="idlePause">Pause the timer after inactivity</span>
+            <span class="desc" data-i18n="idlePauseDesc"
+              >The work period starts over when you're back.</span
+            >
           </label>
           <span class="field">
             <input type="number" id="idlePauseMinutes" min="1" max="120" step="1" required />
-            <span class="unit">min</span>
+            <span class="unit" data-i18n="unitMin">min</span>
           </span>
         </div>
         <label class="row">
-          <span class="text">Start twenty when I log in</span>
+          <span class="text" data-i18n="openAtLogin">Start twenty when I log in</span>
           <input type="checkbox" id="openAtLogin" class="toggle" />
         </label>
       </section>
@@ -99,11 +121,11 @@
       <footer>
         <div class="footnote">
           <p id="status" role="status"></p>
-          <p class="note">Saving restarts the current work period.</p>
+          <p class="note" data-i18n="saveNote">Saving restarts the current work period.</p>
         </div>
         <div class="buttons">
-          <button type="button" id="reset">Restore defaults</button>
-          <button type="submit" id="save" class="primary">Save</button>
+          <button type="button" id="reset" data-i18n="reset">Restore defaults</button>
+          <button type="submit" id="save" class="primary" data-i18n="save">Save</button>
         </div>
       </footer>
     </form>

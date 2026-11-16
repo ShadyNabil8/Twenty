@@ -42,6 +42,9 @@ All state and timing live in the **main process**; renderers are dumb views.
   250ms re-assert, `darwin.ts` CGAssociateMouseAndMouseCursorPosition + warp,
   `x11.ts` XGrabPointer + warp loop, noop on Wayland (impossible by design).
 - `src/main/settings.ts` — validated JSON persistence (Electron-free, unit-tested).
+- `src/shared/i18n.ts` — every UI string (en + ar), digit localization, RTL helper.
+  Pages get the language as a `lang` query param; a language-only settings change
+  never restarts the work period. Fonts: JetBrains Mono (en), Cairo (ar), both bundled.
 - `src/shared/ipc.ts` — every IPC channel name; `src/preload/index.ts` — the only
   bridge (`window.eye`), contextIsolation on, nodeIntegration off.
 - `src/renderer/{overlay,hint,settings}/` — vanilla TS + CSS, one folder per window.
