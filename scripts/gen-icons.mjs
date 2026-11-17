@@ -1,8 +1,11 @@
-// Generates all app icons programmatically (no binary assets in the repo):
-//   resources/tray-16|24|32.png        white line-art eye (Windows/Linux tray)
-//   resources/trayTemplate[@2x].png    black line-art eye (macOS template tray icon)
-//   resources/icon-256.png             filled yellow eye on ink square (window icons)
-//   build/icon.png (512)               source icon for electron-builder packaging
+// Generates all app icons programmatically (no binary assets in the repo).
+// The mark is the "lowering lid": a round eye whose lid comes down as the next
+// break gets closer, and closes during the break.
+//   resources/tray/lid-<k>-16|24.png          white tray frames (Windows 16, Linux 24)
+//   resources/tray/lid-<k>-template[@2x].png  black macOS template frames
+//     k = 0..7 lid lowering through the work period, k = 8 closed (break)
+//   resources/icon-256.png                    app mark on a chart-white tile (window icons)
+//   build/icon.png (512)                      source icon for electron-builder packaging
 import { deflateSync } from 'node:zlib'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -93,57 +96,87 @@ function render(size, scene) {
 
 const dist = (x1, y1, x2, y2) => Math.hypot(x1 - x2, y1 - y2)
 
-// Vesica-piscis eye outline: two circles of radius R offset ±D vertically
-// produce a lens with half-width W and half-height H.
-const W = 0.44
-const H = 0.25
-const D = (W * W - H * H) / (2 * H)
-const R = D + H
-
-function inLens(u, v, shrink = 0) {
-  return dist(u, v, 0.5, 0.5 - D) <= R - shrink && dist(u, v, 0.5, 0.5 + D) <= R - shrink
+/** Distance from (x, y) to the segment (ax, ay)–(bx, by). */
+function segDist(x, y, ax, ay, bx, by) {
+  const t = Math.max(
+    0,
+    Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)),
+  )
+  return dist(x, y, ax + t * (bx - ax), ay + t * (by - ay))
 }
 
-/** Line-art eye for tray icons (transparent background). */
-function trayScene(color) {
-  return (u, v) => {
-    const stroke = 0.1
-    const outline = inLens(u, v) && !inLens(u, v, stroke)
-    const iris = Math.abs(dist(u, v, 0.5, 0.5) - 0.145) <= stroke / 2 && inLens(u, v, stroke / 2)
-    const pupil = dist(u, v, 0.5, 0.5) <= 0.06
-    return outline || iris || pupil ? [...color, 1] : [0, 0, 0, 0]
+// The eye on a 64-unit grid: outline ring r=24 (stroke 4.5), lid and pupil inside r=22.
+export const TRAY_FRAMES = 9 // 0..7 lowering, 8 closed
+const CLOSED = TRAY_FRAMES - 1
+
+/** Lid edge (grid y) for frame k: from the top of the eye down to just below centre. */
+const lidEdge = (k) => 10 + (k / CLOSED) * 27
+
+/**
+ * Lid-eye layer at grid point (x, y) for frame k.
+ * Returns 'ring' | 'lid' | 'pupil' | 'lash' | null.
+ */
+function eyeLayer(x, y, k) {
+  const r = dist(x, y, 32, 32)
+  if (Math.abs(r - 24) <= 2.25) return 'ring'
+  if (k >= CLOSED) {
+    if (r <= 22 && y <= 37) return 'lid'
+    if (segDist(x, y, 17, 44, 47, 44) <= 2) return 'lash'
+    return null
   }
+  const edge = k > 0 ? lidEdge(k) : 0
+  if (r <= 22 && y <= edge) return 'lid'
+  // The pupil slips under the lid with a small gap, so one-colour tray icons
+  // never merge the two into a blob.
+  if (dist(x, y, 32, 36) <= 7 && y >= edge + 3) return 'pupil'
+  return null
 }
 
-/** Filled eye on a sharp ink square for the app icon (twenty's yellow accent). */
+/** One-colour tray frame (transparent background), like the OS expects. */
+function trayScene(color, k) {
+  return (u, v) => (eyeLayer(u * 64, v * 64, k) ? [...color, 1] : [0, 0, 0, 0])
+}
+
+const INK = [0x10 / 255, 0x10 / 255, 0x10 / 255]
+const CHART = [0xf4 / 255, 0xf3 / 255, 0xef / 255]
+const RED = [0xef / 255, 0x5a / 255, 0x4f / 255]
+
+/** App icon: the static mark (lid at grid y=24) in ink with a red pupil on a chart-white tile. */
 function appScene(u, v) {
-  const layers = [
-    [inLens(u, v), [0.24, 0.24, 0.23]], // lens outline
-    [inLens(u, v, 0.02), [0.95, 0.95, 0.95]], // sclera
-    [dist(u, v, 0.5, 0.5) <= 0.16 && inLens(u, v, 0.02), [0.78, 0.6, 0.12]], // iris rim
-    [dist(u, v, 0.5, 0.5) <= 0.135 && inLens(u, v, 0.02), [0.96, 0.77, 0.26]], // iris
-    [dist(u, v, 0.5, 0.5) <= 0.062, [0.047, 0.051, 0.043]], // pupil
-    [dist(u, v, 0.55, 0.44) <= 0.028, [1, 1, 1]], // highlight
-  ]
-  let color = [0.047, 0.051, 0.043] // background ink #0c0d0b
-  for (const [hit, c] of layers) if (hit) color = c
-  return [...color, 1]
+  const x = u * 64
+  const y = v * 64
+  // Rounded tile, corner radius 12.
+  const cx = Math.min(Math.max(x, 12), 52)
+  const cy = Math.min(Math.max(y, 12), 52)
+  if (dist(x, y, cx, cy) > 12) return [0, 0, 0, 0]
+  // Mark scaled to 52/64 and centred on the tile.
+  const mx = (x - 6) * (64 / 52)
+  const my = (y - 6) * (64 / 52)
+  const layer = eyeLayer(mx, my, 4.15) // 10 + 4.15/8·27 ≈ 24
+  if (layer === 'pupil') return [...RED, 1]
+  if (layer) return [...INK, 1]
+  return [...CHART, 1]
 }
 
 // -------------------------------------------------------------------- write
+const WHITE = [1, 1, 1]
+const BLACK = [0, 0, 0]
 const outputs = [
-  ['resources/tray-16.png', render(16, trayScene([1, 1, 1]))],
-  ['resources/tray-24.png', render(24, trayScene([1, 1, 1]))],
-  ['resources/tray-32.png', render(32, trayScene([1, 1, 1]))],
-  ['resources/trayTemplate.png', render(16, trayScene([0, 0, 0]))],
-  ['resources/trayTemplate@2x.png', render(32, trayScene([0, 0, 0]))],
   ['resources/icon-256.png', render(256, appScene)],
   ['build/icon.png', render(512, appScene)],
 ]
+for (let k = 0; k < TRAY_FRAMES; k++) {
+  outputs.push(
+    [`resources/tray/lid-${k}-16.png`, render(16, trayScene(WHITE, k))],
+    [`resources/tray/lid-${k}-24.png`, render(24, trayScene(WHITE, k))],
+    [`resources/tray/lid-${k}-template.png`, render(16, trayScene(BLACK, k))],
+    [`resources/tray/lid-${k}-template@2x.png`, render(32, trayScene(BLACK, k))],
+  )
+}
 
 for (const [rel, buf] of outputs) {
   const path = join(root, rel)
   mkdirSync(dirname(path), { recursive: true })
   writeFileSync(path, buf)
-  console.log(`wrote ${rel} (${buf.length} bytes)`)
 }
+console.log(`wrote ${outputs.length} icons`)

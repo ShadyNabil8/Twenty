@@ -6,7 +6,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -15,15 +15,24 @@ header {
 }
 
 header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 0;
   font-size: 28px;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.04em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+header h1 .mark {
+  width: 32px;
+  height: 32px;
+  flex: none;
 }
 
 header p {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -44,6 +53,8 @@ header h1 {
   display: inline-flex;
   flex: none;
   border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .lang-switch label {
@@ -62,16 +73,9 @@ header h1 {
 .lang-switch span {
   display: block;
   padding: 4px 12px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.lang-switch span[lang='ar'] {
-  font-family: 'Cairo', sans-serif;
-}
-
-.lang-switch span[lang='en'] {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--fg-2);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .lang-switch label:hover span {
@@ -80,14 +84,14 @@ header h1 {
 }
 
 .lang-switch input:checked + span {
-  background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 600;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 700;
 }
 
 .lang-switch input:focus-visible + span {
-  outline: 1px solid var(--accent);
-  outline-offset: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 form {
@@ -98,11 +102,18 @@ section {
   margin-top: 28px;
 }
 
+/* Section labels: red spaced capitals, like chart notation. */
 h2 {
   margin: 0 0 4px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--accent);
+}
+
+h2:lang(ar) {
+  font-size: 14px;
 }
 
 /* --- Rows: text left, control right, hairline between ------------------- */
@@ -168,6 +179,7 @@ input[type='number'],
 textarea {
   box-sizing: border-box;
   border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
   background: var(--surface);
   color: var(--fg);
   font: inherit;
@@ -183,7 +195,7 @@ input[type='number'] {
 
 input[type='number']:hover:not(:disabled),
 textarea:hover {
-  border-color: #ffffff47;
+  border-color: var(--muted);
 }
 
 input[type='number']:disabled {
@@ -211,16 +223,17 @@ textarea:focus-visible {
   text-align: start;
 }
 
-/* --- Square toggle (styled checkbox) ------------------------------------- */
+/* --- Toggle: outlined square track, red knob when on ---------------------- */
 input.toggle {
   appearance: none;
   position: relative;
   flex: none;
-  width: 34px;
-  height: 18px;
+  width: 36px;
+  height: 20px;
   margin: 0;
-  border: 1px solid var(--border-strong);
-  background: var(--surface-2);
+  border: 2px solid var(--muted);
+  border-radius: var(--radius);
+  background: transparent;
   cursor: pointer;
   transition:
     background 120ms ease,
@@ -230,10 +243,10 @@ input.toggle {
 input.toggle::after {
   content: '';
   position: absolute;
-  top: 3px;
-  inset-inline-start: 3px;
-  width: 10px;
-  height: 10px;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 12px;
+  height: 12px;
   background: var(--muted);
   transition:
     transform 120ms ease,
@@ -241,8 +254,7 @@ input.toggle::after {
 }
 
 input.toggle:checked {
-  border-color: var(--accent);
-  background: var(--accent-dim);
+  border-color: var(--fg);
 }
 
 input.toggle:checked::after {
@@ -259,7 +271,7 @@ input.toggle:disabled {
   cursor: default;
 }
 
-/* --- Range: 2px track, square thumb -------------------------------------- */
+/* --- Range: 2px track, square red thumb ---------------------------------- */
 input[type='range'] {
   appearance: none;
   width: 168px;
@@ -325,9 +337,11 @@ button {
   height: 34px;
   padding: 0 16px;
   border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
   background: transparent;
   color: var(--fg);
   font: inherit;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -339,7 +353,6 @@ button.primary {
   border-color: var(--accent);
   background: var(--accent);
   color: var(--on-accent);
-  font-weight: 600;
 }
 
 button.primary:hover {

@@ -30,7 +30,7 @@ const OUT_DIR = join(ROOT, 'docs', 'screenshots')
 const PRELOAD = join(ROOT, 'out', 'preload', 'index.js')
 const BG = '#0c0d0b'
 /** Stand-in "desktop" behind the translucent overlay and the hint toast. */
-const WALLPAPER = 'linear-gradient(135deg, #24425e 0%, #3e3a63 55%, #6b4a5c 100%)'
+const WALLPAPER = '#3a4656'
 const FONT = "'Segoe UI', system-ui, sans-serif"
 
 // Keep Electron's profile (cache, prefs) out of the user's AppData.
@@ -199,6 +199,7 @@ async function trayMenu(snap: TimerSnapshot, lang: Language): Promise<NativeImag
   new TrayController(
     () => snap,
     () => lang,
+    () => 20 * 60_000,
     {
       breakNow: () => {},
       snooze: () => {},

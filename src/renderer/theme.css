@@ -1,48 +1,112 @@
-/* Shared tokens for every twenty window. Palette follows termix.site's dark
-   theme, with its orange accent swapped for yellow at the same lightness. */
+/* Shared tokens for every twenty window. Identity: "eye chart" — ink, chart white and
+   one chart red, flat colour only, square 2px edges, Tajawal for English and Arabic alike. */
 
+/* Tajawal (OFL, see fonts/OFL-Tajawal.txt): one family for both scripts, static weights. */
 @font-face {
-  font-family: 'JetBrains Mono';
+  font-family: 'Tajawal';
   font-style: normal;
   font-display: block;
-  font-weight: 100 800;
-  src: url('./fonts/JetBrainsMono-latin-wght.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-display: block;
-  font-weight: 100 800;
-  src: url('./fonts/JetBrainsMono-latin-ext-wght.woff2') format('woff2');
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
-}
-
-/* Cairo: the Arabic UI face (variable 200–1000). Its Arabic subset also covers
-   Arabic text typed into messages while the UI is in English. */
-@font-face {
-  font-family: 'Cairo';
-  font-style: normal;
-  font-display: block;
-  font-weight: 200 1000;
-  src: url('./fonts/Cairo-arabic-wght.woff2') format('woff2');
+  font-weight: 300;
+  src: url('./fonts/Tajawal-arabic-300.woff2') format('woff2');
   unicode-range:
     U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
     U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
 }
 
 @font-face {
-  font-family: 'Cairo';
+  font-family: 'Tajawal';
   font-style: normal;
   font-display: block;
-  font-weight: 200 1000;
-  src: url('./fonts/Cairo-latin-wght.woff2') format('woff2');
+  font-weight: 300;
+  src: url('./fonts/Tajawal-latin-300.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url('./fonts/Tajawal-arabic-400.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url('./fonts/Tajawal-latin-400.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 500;
+  src: url('./fonts/Tajawal-arabic-500.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 500;
+  src: url('./fonts/Tajawal-latin-500.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 700;
+  src: url('./fonts/Tajawal-arabic-700.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 700;
+  src: url('./fonts/Tajawal-latin-700.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 800;
+  src: url('./fonts/Tajawal-arabic-800.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-display: block;
+  font-weight: 800;
+  src: url('./fonts/Tajawal-latin-800.woff2') format('woff2');
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -51,42 +115,32 @@
 :root {
   color-scheme: dark;
 
-  --bg: #0c0d0b;
-  --surface: #121311;
-  --surface-2: #181917;
-  --hover: #232323;
-  --border: #ffffff1c;
-  --border-strong: #ffffff2e;
-  --fg: #f2f2f2;
-  --fg-2: #c4c4c4;
-  --muted: #9e9e9e;
-  --accent: #f5c542;
-  --accent-hover: #ffd35c;
-  --accent-dim: #f5c54229;
-  --on-accent: #0c0d0b;
+  --bg: #101010; /* ink */
+  --surface: #191918; /* carbon */
+  --surface-2: #191918;
+  --hover: #222221; /* graphite */
+  --border: #f4f3ef1a;
+  --border-strong: #f4f3ef38;
+  --fg: #f4f3ef; /* chart */
+  --fg-2: #cfcdc6;
+  --muted: #8c8c88; /* pencil */
+  --accent: #ef5a4f; /* chart red */
+  --accent-hover: #f47268;
+  --accent-dim: #ef5a4f29;
+  --on-accent: #ffffff;
+  --radius: 2px;
 
-  /* Arabic falls through to Cairo; other scripts JetBrains Mono lacks use the system UI font. */
-  --font:
-    'JetBrains Mono', 'Cairo', ui-monospace, 'Segoe UI', system-ui, -apple-system, Roboto,
-    sans-serif;
+  --font: 'Tajawal', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
 }
 
-/* Arabic UI: Cairo for everything, and no letter-spacing (it breaks Arabic joining). */
-:root:lang(ar) {
-  --font: 'Cairo', 'JetBrains Mono', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
-}
-
+/* Spaced capitals read like chart notation in English; Arabic has no case, and
+   letter-spacing breaks its joining. */
 :lang(ar) {
   letter-spacing: normal !important;
-}
-
-*,
-*::before,
-*::after {
-  border-radius: 0;
+  text-transform: none !important;
 }
 
 :focus-visible {
-  outline: 1px solid var(--accent);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

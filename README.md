@@ -86,7 +86,7 @@ Task Manager via Ctrl+Alt+Del), which releases the mouse. Settings, snooze ("Sno
 live in the tray menu.
 
 The UI is available in **English** and **Arabic** (switch at the top of
-Settings). Arabic uses the Cairo font, right-to-left layout and Arabic-Indic
+Settings). Both languages use the Tajawal font; Arabic gets a right-to-left layout and Arabic-Indic
 digits across Settings, the break overlay, the hint toast and the tray menu.
 Break messages are yours to edit in either language.
 
@@ -159,6 +159,6 @@ The application must implement the following features:
 
 ### 11. System Tray Integration
 
-- The application runs in the background with a system tray/menu bar icon.
+- The application runs in the background with a system tray/menu bar icon: an eye whose lid lowers as the next break gets closer and closes during the break.
 - The tray menu shows the remaining time until the next break.
 - Provides quick actions to "Snooze for 1 Hour" or "Pause until Tomorrow".

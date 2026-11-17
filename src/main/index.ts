@@ -151,6 +151,7 @@ if (!app.requestSingleInstanceLock()) {
     tray = new TrayController(
       () => engine.snapshot(Date.now()),
       () => store.get().language,
+      () => toTimerConfig(store.get()).workMs,
       {
         breakNow: () => dispatch(engine.startBreakNow(Date.now())),
         snooze: () => dispatch(engine.suspend(Date.now() + SNOOZE_MS, 'snooze', Date.now())),

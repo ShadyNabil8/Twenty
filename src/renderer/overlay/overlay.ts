@@ -29,11 +29,24 @@ const edgeBar = document.getElementById('edge-bar') as HTMLDivElement
 ;(document.getElementById('message') as HTMLHeadingElement).textContent = message
 ;(document.getElementById('kicker') as HTMLParagraphElement).textContent = t.kicker
 
-escapeHintEl.textContent = strict
-  ? t.strict
-  : skippable
-    ? t.skippable
-    : t.holdEsc(Math.round(ESC_HOLD_MS / 1000))
+/** Set text, drawing every "Esc" as a key cap (built from DOM nodes, never HTML). */
+function setWithKeyCaps(el: HTMLElement, text: string): void {
+  el.replaceChildren()
+  text.split(/(Esc)/).forEach((part) => {
+    if (part === 'Esc') {
+      const kbd = document.createElement('kbd')
+      kbd.textContent = part
+      el.append(kbd)
+    } else if (part) {
+      el.append(part)
+    }
+  })
+}
+
+setWithKeyCaps(
+  escapeHintEl,
+  strict ? t.strict : skippable ? t.skippable : t.holdEsc(Math.round(ESC_HOLD_MS / 1000)),
+)
 
 // --- Fade in (CSS transition; portable across platforms) ------------------
 let fadedIn = false
