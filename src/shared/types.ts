@@ -2,7 +2,7 @@ export type Language = 'en' | 'ar'
 
 export interface Settings {
   version: 1
-  /** UI language. Arabic switches every window to RTL with the Cairo font. */
+  /** UI language. Arabic switches every window to RTL (Tajawal covers both scripts). */
   language: Language
   /** Work period between breaks, in minutes. */
   workMinutes: number

@@ -30,10 +30,18 @@ main {
   font-family: var(--font);
 }
 
+/* Spaced capitals, like the notation on an eye chart. */
 #kicker {
   margin: 0 0 0.75rem;
   font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--muted);
+}
+
+#kicker:lang(ar) {
+  font-size: 15px;
 }
 
 #message {
@@ -48,16 +56,16 @@ main {
 #countdown {
   margin: 0.15em 0 0.1em;
   font-size: clamp(6rem, 16vw, 12rem);
-  font-weight: 200;
+  font-weight: 300;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: var(--fg);
 }
 
-/* Arabic-Indic ٠ and ٥ are small marks; a hairline weight makes them vanish. */
+/* Arabic-Indic ٠ and ٥ are small marks; a light weight makes them vanish. */
 #countdown:lang(ar) {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 #escape-hint {
@@ -66,9 +74,20 @@ main {
   color: var(--muted);
 }
 
+kbd {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--fg-2);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 #hold-progress {
   width: 240px;
-  height: 2px;
+  height: 3px;
   margin: 0.9rem auto 0;
   background: var(--border-strong);
   opacity: 0;
@@ -91,7 +110,7 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3px;
+  height: 4px;
   background: var(--border);
 }
 

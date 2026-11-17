@@ -45,7 +45,10 @@ All state and timing live in the **main process**; renderers are dumb views.
 - `src/main/settings.ts` — validated JSON persistence (Electron-free, unit-tested).
 - `src/shared/i18n.ts` — every UI string (en + ar), digit localization, RTL helper.
   Pages get the language as a `lang` query param; a language-only settings change
-  never restarts the work period. Fonts: JetBrains Mono (en), Cairo (ar), both bundled.
+  never restarts the work period. Font: Tajawal (en + ar), bundled.
+- `src/renderer/theme.css` — identity tokens ("eye chart": ink, chart white, one red; flat, 2px edges).
+- `src/main/tray-frame.ts` — pure tray-icon frame picker; `scripts/gen-icons.mjs` draws the
+  lowering-lid eye (app icon + 9 tray frames: lid lowers through the work period, closed = break).
 - `src/shared/ipc.ts` — every IPC channel name; `src/preload/index.ts` — the only
   bridge (`window.eye`), contextIsolation on, nodeIntegration off.
 - `src/renderer/{overlay,hint,settings}/` — vanilla TS + CSS, one folder per window.
