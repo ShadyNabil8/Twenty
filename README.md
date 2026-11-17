@@ -6,6 +6,28 @@ The application runs in the background and controls screen activity to ensure th
 
 Built with **Electron + TypeScript**. All eleven features below are implemented.
 
+## Why twenty?
+
+Most break reminders are a notification you click away without looking up.
+twenty is built so the break actually happens:
+
+- **It enforces the break, not just reminds you.** Every screen goes dark and the
+  mouse is pinned in place until the break ends.
+- **No "other monitor" to escape to.** One overlay per display, including screens
+  plugged in mid-break.
+- **Firm, but never a lockout.** Hold Esc for 3 seconds as an emergency hatch.
+  Strict mode (no way out) is opt-in, and the mouse is always released if the app
+  quits or crashes.
+- **Knows when you're away.** OS-level idle detection pauses the timer after 5
+  minutes, so you don't get a break the moment you're back from lunch.
+- **Gentle, not jarring.** A small hint before the break, then a 2.5-second fade-in
+  with a soft chime instead of a sudden lock.
+- **Progress at a glance.** The tray icon is an eye whose lid lowers as the break
+  gets closer and closes during it.
+- **Arabic as a first-class language.** Full right-to-left layout and Arabic-Indic
+  digits in every window, not a partial translation.
+- **Light and private.** One runtime dependency, no account, and no network calls.
+
 ![The break overlay: a dark full-screen veil with an eye-care message and a large countdown](docs/screenshots/overlay.png)
 
 ## Screenshots
